@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>중간고사 D-14 정밀 학습진단</title>
+<style>
+:root{--bg:#f7f8fb;--card:#fff;--text:#18202b;--muted:#687386;--line:#dfe4ec;--accent:#5267d8;--soft:#eef1ff;--good:#eaf7ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR","Noto Sans SC",sans-serif}
+.wrap{max-width:680px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand{font-weight:800;font-size:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:14px}
+h1{font-size:25px;line-height:1.3;margin:4px 0 10px}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:0 0 10px}
+p{line-height:1.65}.muted{color:var(--muted);font-size:14px}.btn{border:0;border-radius:14px;min-height:48px;padding:11px 16px;font-size:16px;font-weight:750;cursor:pointer}
+.primary{background:var(--accent);color:white}.secondary{background:white;border:1px solid var(--line);color:var(--text)}
+.full{width:100%}.hidden{display:none!important}.scale{padding:10px 12px;background:#f4f6fa;border-radius:11px;margin:7px 0;font-size:14px}
+.progress{height:8px;background:#e8ebf2;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--accent)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.answers{display:grid;gap:9px;margin-top:18px}
+.answer{width:100%;text-align:left;background:white;border:1px solid var(--line);border-radius:14px;min-height:54px;padding:12px 14px;font-size:15px;cursor:pointer}
+.answer.sel{background:var(--soft);border:2px solid var(--accent);font-weight:700}
+.nav{display:flex;gap:9px}.nav .primary{flex:1}label{display:block;font-weight:700;margin:14px 0 7px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:white;color:var(--text);font:inherit;font-size:16px}
+textarea{resize:vertical}.tag{font-size:13px;font-weight:750;color:var(--accent)}.resultHero{background:var(--soft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini{border:1px solid var(--line);border-radius:14px;padding:14px}
+.score{margin:12px 0}.scoreline{height:8px;background:#e9ecf2;border-radius:99px;overflow:hidden;margin-top:5px}.scoreline div{height:100%;background:#7785a8}
+.plan{padding:12px 0;border-bottom:1px solid var(--line)}.plan:last-child{border:0}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1;min-width:140px}
+.notice{background:#fff9e8;border:1px solid #eee0aa;border-radius:13px;padding:12px;font-size:13px;line-height:1.55}
+@media(max-width:430px){.wrap{padding:12px}.card{padding:17px}.two{grid-template-columns:1fr}h1{font-size:22px}}
+</style></head>
+<body><main class="wrap">
+<div class="top"><div class="brand">📚 D-14 Study Coach</div><button id="lang" class="btn secondary">中文</button></div>
+
+<section id="intro" class="card">
+<div class="tag" id="eyebrow">중간고사 D-14</div><h1 id="title">시험까지 2주, 지금 나에게 필요한 공부는?</h1>
+<p id="introText" class="muted">성격검사가 아닙니다. 최근 7일 동안 실제로 어떻게 공부했는지 확인합니다. 솔직하게 답할수록 나에게 맞는 계획을 찾기 쉽습니다.</p>
+<div id="scaleGuide"></div>
+<label id="nameLabel">이름 또는 번호 (선택)</label><input id="studentName" placeholder="예: 12 육선호">
+<button id="start" class="btn primary full" style="margin-top:16px">진단 시작</button>
+</section>
+
+<section id="quiz" class="hidden">
+<div class="row" style="margin-bottom:7px"><span id="domain" class="tag"></span><span id="count" class="muted"></span></div>
+<div class="progress"><div id="bar"></div></div>
+<div class="card" style="margin-top:14px"><h2 id="question"></h2><div id="answers" class="answers"></div></div>
+<div class="nav"><button id="prev" class="btn secondary">이전</button><button id="next" class="btn primary">다음</button></div>
+</section>
+
+<section id="context" class="hidden card">
+<h2 id="contextTitle">마지막으로 조금만 더 알려주세요</h2>
+<label id="subjectLabel">가장 걱정되는 과목</label><input id="subject" placeholder="예: 사회">
+<label id="blockerLabel">현재 가장 큰 공부 방해요인</label><select id="blocker"></select>
+<label id="methodLabel">시험공부를 할 때 가장 많이 하는 방법</label><select id="method"></select>
+<button id="diagnose" class="btn primary full" style="margin-top:18px">정밀 진단 결과 보기</button>
+</section>
+
+<section id="result" class="hidden">
+<div class="card resultHero"><div id="resultEye" class="tag">나의 학습 진단</div><h1 id="mainType"></h1><p id="summary"></p></div>
+<div class="two">
+<div class="mini"><div id="pLabel" class="muted">우선 개선</div><strong id="priority"></strong></div>
+<div class="mini"><div id="sLabel" class="muted">현재 강점</div><strong id="strength"></strong></div>
+</div>
+<div class="card" style="margin-top:14px"><h3 id="detailTitle">9개 영역 상세 결과</h3><div id="scores"></div></div>
+<div class="card"><h3 id="planTitle">중간고사 D-14 맞춤 처방</h3><div id="plans"></div></div>
+<div class="card"><h3 id="promiseTitle">나의 7일 실천 약속</h3><p id="promiseHelp" class="muted">욕심내지 말고 한 가지만 정하세요.</p><textarea id="promise" rows="4" placeholder="예: 월~금 저녁 8시 사회 20분 → 마지막에 책을 덮고 핵심어 3개 말하기"></textarea></div>
+<div class="notice" id="notice">※ 이 결과는 능력이나 성격을 평가하는 검사가 아닙니다. 시험 전 학습 습관을 점검하고 다음 행동을 정하기 위한 코칭 자료입니다.</div>
+<div class="actions" style="margin-top:14px"><button id="share" class="btn primary">결과 공유하기</button><button id="save" class="btn secondary">결과 파일 저장</button><button id="reset" class="btn secondary">다시 검사</button></div>
+</section>
+
+<section id="shareBox" class="hidden card" style="margin-top:14px"><div class="row"><h3 id="shareTitle">공유할 결과</h3><button id="close" class="btn secondary">×</button></div><textarea id="shareText" rows="14" readonly></textarea><button id="nativeShare" class="btn primary full" style="margin-top:10px">휴대폰 공유 메뉴 열기</button><p id="shareHelp" class="muted">공유 메뉴가 지원되지 않는 기기에서는 위 내용을 선택해 복사할 수 있습니다.</p></section>
+</main>
+<script>
+(()=>{let zh=false,idx=0,ans=[];
+const D=[['목표·범위','目标·范围'],['계획','计划'],['시작·실행','开始·执行'],['집중·환경','专注·环境'],['수업이해','课堂理解'],['한국어·어휘','韩语·词汇'],['기억·인출','记忆·提取'],['문제·오답','做题·错题'],['점검·도움','检查·求助']];
+const Q=[
+[0,'시험에서 어느 정도의 결과를 받고 싶은지 알고 있다.','我知道这次考试自己想达到什么样的成绩。'],[0,'과목별 시험범위가 어디까지인지 알고 있다.','我知道每个科目的考试范围。'],[0,'어떤 과목과 단원을 먼저 공부해야 하는지 알고 있다.','我知道应该先复习哪个科目和单元。'],
+[1,'시험일까지 공부할 내용을 날짜별로 나눌 수 있다.','我能把考试前要学的内容分配到每天。'],[1,'하루 공부량을 실제로 끝낼 수 있을 만큼 정한다.','我会把每天的学习量定在实际能完成的范围内。'],[1,'계획을 못 지킨 날에는 다음 계획을 다시 조정한다.','没有完成计划时，我会重新调整之后的计划。'],
+[2,'공부해야 한다고 생각한 뒤 오래 미루지 않고 시작한다.','想到该学习后，我不会拖很久才开始。'],[2,'하기 싫은 과목도 정한 시간에는 시작한다.','即使是不喜欢的科目，我也会在规定时间开始。'],[2,'계획한 공부를 중간에 포기하지 않고 끝내는 편이다.','我通常能把计划的学习完成，而不是中途放弃。'],
+[3,'공부할 때 20분 정도 한 가지 공부에 집중할 수 있다.','学习时，我能连续约20分钟专注于一项任务。'],[3,'공부 중 휴대폰·게임·대화 때문에 자주 끊기지 않는다.','学习时不会经常被手机、游戏或聊天打断。'],[3,'졸리거나 피곤할 때 공부할 장소나 방법을 바꾸어 다시 집중한다.','困或累时，我会改变学习地点或方法，让自己重新集中注意力。'],
+[4,'수업이 끝난 뒤 오늘 배운 핵심 내용을 대략 설명할 수 있다.','下课后，我大致能说明今天学到的核心内容。'],[4,'설명을 읽었을 때 왜 그런지 이해하며 공부한다.','看学习内容时，我会理解“为什么”，而不只是看过去。'],[4,'모르는 개념이 생기면 그냥 외우기 전에 뜻을 확인한다.','遇到不懂的概念时，我会先弄懂意思，而不是直接死记。'],
+[5,'시험 문제나 학습지의 한국어 문장을 읽고 무엇을 묻는지 이해할 수 있다.','我能读懂试题或学习单的韩语句子，知道题目在问什么。'],[5,'수업에서 자주 나오는 핵심 한국어 단어의 뜻을 알고 있다.','我知道课堂中常出现的核心韩语词汇的意思。'],[5,'모르는 한국어 단어 때문에 공부가 막히면 뜻을 찾아 확인한다.','因为不懂韩语单词而卡住时，我会查清它的意思。'],
+[6,'공부한 뒤 책을 덮고 기억나는 내용을 말하거나 써본다.','学习后，我会合上书，说出或写出自己记得的内容。'],[6,'어제나 며칠 전에 공부한 내용을 다시 떠올려본다.','我会重新回想昨天或几天前学过的内容。'],[6,'외웠다고 생각한 내용도 보지 않고 답할 수 있는지 확인한다.','即使觉得已经背会了，我也会检查自己能否不看资料回答。'],
+[7,'시험 전에 실제 문제를 직접 풀어본다.','考试前，我会亲自做练习题。'],[7,'틀린 문제의 정답만 보는 것이 아니라 틀린 이유를 확인한다.','做错题后，我不只看答案，还会确认自己为什么错。'],[7,'틀린 문제를 나중에 다시 풀어본다.','我会过一段时间重新做错过的题。'],
+[8,'공부가 끝나면 오늘 무엇을 알고 무엇을 모르는지 확인한다.','学习结束后，我会确认今天哪些会、哪些还不会。'],[8,'혼자 해결되지 않는 것은 선생님이나 친구에게 질문한다.','自己解决不了的问题，我会问老师或同学。'],[8,'시험이 가까워질수록 부족한 부분을 찾아 공부 순서를 바꾼다.','越接近考试，我越会根据薄弱部分调整复习顺序。']];
+const scales=[['전혀 아니다 · 최근 7일 동안 거의 한 적이 없다','完全不是 · 最近7天几乎没做过'],['가끔 그렇다 · 10번 중 1~3번 정도','偶尔 · 10次中约1~3次'],['자주 그렇다 · 10번 중 4~7번 정도','经常 · 10次中约4~7次'],['거의 항상 그렇다 · 10번 중 8~10번 정도','几乎总是 · 10次中约8~10次']];
+const blockers=[['무엇부터 해야 할지 모르겠다','不知道该从哪里开始'],['한국어가 어렵다','韩语很难'],['수업 내용을 이해하기 어렵다','课堂内容难以理解'],['공부 방법을 모르겠다','不知道怎么学习'],['휴대폰·게임','手机·游戏'],['집중하기 어렵다','很难集中注意力'],['시작하기 싫다','不想开始'],['시간이 부족하다','时间不够'],['피곤하거나 졸리다','疲劳或困倦']];
+const methods=[['교과서·학습지를 여러 번 읽는다','反复阅读课本或学习单'],['내용을 여러 번 쓴다','反复抄写内容'],['외우려고 반복해서 본다','反复看内容来背诵'],['문제를 직접 푼다','自己做题'],['책을 덮고 기억나는 것을 말하거나 쓴다','合上书回忆并说出或写出内容'],['친구에게 설명하거나 함께 공부한다','给同学讲解或一起学习'],['아직 시험공부를 거의 하지 않았다','还几乎没有开始复习']];
+const advice=[
+['시험범위를 한 장에 적고, 가장 급한 과목 2개에 표시하세요. 오늘 할 일은 1~2개만 정합니다.','把考试范围写在一张纸上，标出最急的两个科目。每天只定1~2项任务。'],
+['D-14~D-8과 D-7~D-2로 나누고 하루 분량을 20~30분 단위로 작게 정하세요. 못 한 날은 포기하지 말고 다음 날 계획을 다시 조정합니다.','把两周分成D-14~D-8和D-7~D-2，每天安排20~30分钟的小任务。没完成时重新调整，不要直接放弃。'],
+['“몇 시에·어디서·무엇을 20분 할지”를 정하고 그 시간이 되면 5분만이라도 시작하세요. 시작한 뒤 체크 표시를 남깁니다.','确定“几点、在哪里、学什么20分钟”，到时间先开始5分钟。开始后留下完成标记。'],
+['20분 동안 휴대폰을 손에서 떨어진 곳에 두고 한 과제만 합니다. 피곤하면 장소를 바꾸거나 5분 쉬고 다시 시작하세요.','20分钟把手机放远，只做一项任务。累时换地点或休息5分钟后重新开始。'],
+['공부시간을 늘리기 전에 이해 안 되는 핵심 개념 3개를 찾으세요. 쉬운 말로 설명해보고 설명이 안 되면 질문합니다.','先找出3个没理解的核心概念，不要只增加学习时间。用简单的话解释，解释不了就提问。'],
+['핵심어 뜻을 중국어로 확인한 뒤 쉬운 한국어로 다시 말하세요. 문제에서 자주 나오는 표현은 따로 5개씩 모읍니다.','核心词先用中文确认意思，再用简单韩语表达。把试题中常见的表达每次整理5个。'],
+['읽기만 하지 말고 책을 덮은 뒤 핵심어 3개를 말하거나 빈 종이에 써보세요. 다음 날 다시 한 번 떠올립니다.','不要只阅读。合上书后说出3个关键词或写在空白纸上，第二天再回忆一次。'],
+['문제를 직접 풀고 “왜 틀렸는지”를 한 문장으로 적으세요. 정답을 본 뒤 같은 문제를 다시 풀어봅니다.','亲自做题，用一句话写出错因。看完答案后，再做一次同一道题。'],
+['공부 마지막 3분에 “아는 것·모르는 것”을 나누세요. 혼자 해결 못 한 것 1개는 다음 날 반드시 질문합니다.','学习最后3分钟区分“会的·不会的”。自己解决不了的至少1个问题，第二天一定提问。']];
+const $=x=>document.querySelector(x), T=x=>x[zh?1:0];
+function renderIntro(){ $('#lang').textContent=zh?'한국어':'中文'; $('#eyebrow').textContent=zh?'期中考试 D-14':'중간고사 D-14'; $('#title').textContent=zh?'离考试还有2周，现在我需要怎样学习？':'시험까지 2주, 지금 나에게 필요한 공부는?'; $('#introText').textContent=zh?'这不是性格测试。请根据最近7天真实的学习情况回答。回答越诚实，越容易找到适合自己的计划。':'성격검사가 아닙니다. 최근 7일 동안 실제로 어떻게 공부했는지 확인합니다. 솔직하게 답할수록 나에게 맞는 계획을 찾기 쉽습니다.'; $('#scaleGuide').innerHTML=scales.map((s,n)=>`<div class="scale"><b>${n}</b> · ${T(s)}</div>`).join(''); $('#nameLabel').textContent=zh?'姓名或学号（可选）':'이름 또는 번호 (선택)'; $('#studentName').placeholder=zh?'例：12 陆善浩':'예: 12 육선호'; $('#start').textContent=zh?'开始诊断':'진단 시작';}
+function renderQuiz(){let q=Q[idx];$('#domain').textContent=T(D[q[0]]);$('#count').textContent=`${idx+1} / ${Q.length}`;$('#bar').style.width=((idx+1)/Q.length*100)+'%';$('#question').textContent=q[zh?2:1];$('#answers').innerHTML='';scales.forEach((s,n)=>{let b=document.createElement('button');b.type='button';b.className='answer'+(ans[idx]===n?' sel':'');b.textContent=n+' · '+T(s);b.onclick=()=>{ans[idx]=n;renderQuiz()};$('#answers').appendChild(b)});$('#prev').textContent=zh?'上一步':'이전';$('#next').textContent=idx===Q.length-1?(zh?'完成回答':'응답 완료'):(zh?'下一步':'다음');$('#prev').disabled=idx===0;}
+function renderContext(){ $('#contextTitle').textContent=zh?'最后再告诉我一点':'마지막으로 조금만 더 알려주세요';$('#subjectLabel').textContent=zh?'最担心的科目':'가장 걱정되는 과목';$('#subject').placeholder=zh?'例：社会':'예: 사회';$('#blockerLabel').textContent=zh?'目前最大的学习障碍':'현재 가장 큰 공부 방해요인';$('#methodLabel').textContent=zh?'复习考试时最常用的方法':'시험공부를 할 때 가장 많이 하는 방법';$('#blocker').innerHTML=blockers.map((x,n)=>`<option value="${n}">${T(x)}</option>`).join('');$('#method').innerHTML=methods.map((x,n)=>`<option value="${n}">${T(x)}</option>`).join('');$('#diagnose').textContent=zh?'查看详细诊断':'정밀 진단 결과 보기';}
+function calc(){let s=Array(9).fill(0),c=Array(9).fill(0);Q.forEach((q,n)=>{s[q[0]]+=ans[n];c[q[0]]++});return s.map((v,n)=>Math.round(v/(c[n]*3)*100))}
+function resultData(){let S=calc(),o=S.map((v,n)=>[n,v]).sort((a,b)=>a[1]-b[1]),hi=S.indexOf(Math.max(...S));return {S,lo:o[0][0],lo2:o[1][0],hi,bi:+$('#blocker').value,mi:+$('#method').value}}
+function renderResult(){let x=resultData();$('#resultEye').textContent=zh?'我的学习诊断':'나의 학습 진단';$('#mainType').textContent=(zh?'现在最需要改善：':'지금 가장 먼저 바꿀 것: ')+T(D[x.lo]);$('#summary').textContent=zh?`第一优先是“${T(D[x.lo])}”，第二优先是“${T(D[x.lo2])}”。你的强项是“${T(D[x.hi])}”。这是决定未来两周先改变什么的结果。`:`1순위는 ‘${T(D[x.lo])}’, 2순위는 ‘${T(D[x.lo2])}’입니다. 강점은 ‘${T(D[x.hi])}’이에요. 앞으로 2주 동안 무엇부터 바꿀지 찾는 결과입니다.`;$('#pLabel').textContent=zh?'优先改善':'우선 개선';$('#priority').textContent=T(D[x.lo])+' → '+T(D[x.lo2]);$('#sLabel').textContent=zh?'目前强项':'현재 강점';$('#strength').textContent=T(D[x.hi]);$('#detailTitle').textContent=zh?'9项详细结果':'9개 영역 상세 결과';$('#scores').innerHTML=x.S.map((v,n)=>`<div class="score"><div class="row"><span>${T(D[n])}</span><b>${v}%</b></div><div class="scoreline"><div style="width:${v}%"></div></div></div>`).join('');$('#planTitle').textContent=zh?'考试前两周个人方案':'중간고사 D-14 맞춤 처방';let extra=zh?`你选择的主要障碍是“${T(blockers[x.bi])}”。本周计划中也要一起减少这个障碍。`:`내가 고른 방해요인은 ‘${T(blockers[x.bi])}’입니다. 이번 주 계획에서 이 방해요인도 함께 줄여보세요.`;$('#plans').innerHTML=`<div class="plan"><b>1 · ${T(D[x.lo])}</b><p>${T(advice[x.lo])}</p></div><div class="plan"><b>2 · ${T(D[x.lo2])}</b><p>${T(advice[x.lo2])}</p></div><div class="plan"><b>${zh?'我的主要障碍':'내가 고른 방해요인'}</b><p>${extra}</p></div>`;$('#promiseTitle').textContent=zh?'我的7天行动约定':'나의 7일 실천 약속';$('#promiseHelp').textContent=zh?'不要贪多，只选一个。':'욕심내지 말고 한 가지만 정하세요.';$('#promise').placeholder=zh?'例：周一到周五晚上8点学习社会20分钟，最后合上书说出3个关键词':'예: 월~금 저녁 8시 사회 20분 → 마지막에 책을 덮고 핵심어 3개 말하기';$('#notice').textContent=zh?'※ 本结果不是能力或性格评价，而是用于检查考试前学习习惯并决定下一步行动的辅导资料。':'※ 이 결과는 능력이나 성격을 평가하는 검사가 아닙니다. 시험 전 학습 습관을 점검하고 다음 행동을 정하기 위한 코칭 자료입니다.';$('#share').textContent=zh?'分享结果':'결과 공유하기';$('#save').textContent=zh?'保存结果文件':'결과 파일 저장';$('#reset').textContent=zh?'重新测试':'다시 검사';}
+function shareText(){let x=resultData(),name=$('#studentName').value||'-',sub=$('#subject').value||'-',prom=$('#promise').value||'-';return `${zh?'[期中考试 D-14 学习诊断]':'[중간고사 D-14 학습진단]'}\n${zh?'姓名/学号':'이름/번호'}: ${name}\n${zh?'担心的科目':'걱정 과목'}: ${sub}\n${zh?'第一优先':'1순위'}: ${T(D[x.lo])}\n${zh?'第二优先':'2순위'}: ${T(D[x.lo2])}\n${zh?'强项':'강점'}: ${T(D[x.hi])}\n${zh?'主要障碍':'방해요인'}: ${T(blockers[x.bi])}\n${zh?'主要复习方法':'주요 공부방법'}: ${T(methods[x.mi])}\n${zh?'7天行动约定':'7일 실천약속'}: ${prom}\n\n${D.map((d,n)=>T(d)+' '+x.S[n]+'%').join(' / ')}`;}
+$('#lang').onclick=()=>{zh=!zh;renderIntro();if(!$('#quiz').classList.contains('hidden'))renderQuiz();if(!$('#context').classList.contains('hidden'))renderContext();if(!$('#result').classList.contains('hidden'))renderResult()};
+$('#start').onclick=()=>{$('#intro').classList.add('hidden');$('#quiz').classList.remove('hidden');renderQuiz()};
+$('#prev').onclick=()=>{if(idx>0){idx--;renderQuiz()}};
+$('#next').onclick=()=>{if(ans[idx]==null){alert(zh?'请选择一个答案。':'답변을 하나 선택해주세요.');return}if(idx<Q.length-1){idx++;renderQuiz()}else{$('#quiz').classList.add('hidden');$('#context').classList.remove('hidden');renderContext()}};
+$('#diagnose').onclick=()=>{$('#context').classList.add('hidden');$('#result').classList.remove('hidden');renderResult();window.scrollTo({top:0,behavior:'smooth'})};
+$('#share').onclick=()=>{$('#shareText').value=shareText();$('#shareBox').classList.remove('hidden');$('#shareTitle').textContent=zh?'分享结果':'공유할 결과';$('#nativeShare').textContent=zh?'打开手机分享菜单':'휴대폰 공유 메뉴 열기';$('#shareHelp').textContent=zh?'如果设备不支持分享菜单，可以选择并复制上面的文字。':'공유 메뉴가 지원되지 않는 기기에서는 위 내용을 선택해 복사할 수 있습니다.';$('#shareBox').scrollIntoView({behavior:'smooth'})};
+$('#close').onclick=()=>$('#shareBox').classList.add('hidden');
+$('#nativeShare').onclick=async()=>{let text=shareText();if(navigator.share){try{await navigator.share({title:zh?'学习诊断结果':'학습진단 결과',text})}catch(e){}}else{$('#shareText').focus();$('#shareText').select();alert(zh?'已选中结果文字。请复制后发送。':'결과 글을 선택했습니다. 복사해서 보내주세요.')}};
+$('#save').onclick=()=>{let blob=new Blob([shareText()],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(($('#studentName').value||'학생').replace(/[^\w가-힣\u4e00-\u9fff-]/g,'_'))+'_D14_학습진단.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('#reset').onclick=()=>{idx=0;ans=[];$('#result').classList.add('hidden');$('#shareBox').classList.add('hidden');$('#intro').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})};
+renderIntro();
+})();
+</script></body></html>
